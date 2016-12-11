@@ -26,7 +26,7 @@ class StockHttpClient: HttpClient {
             
             if let response = response as? HTTPURLResponse {
                 if response.statusCode < 200 || response.statusCode >= 400 {
-                    handler("", HttpError(statusCode: response.statusCode))
+                    handler("", HttpError(url: url, statusCode: response.statusCode))
                     return
                 }
             } else {
@@ -54,5 +54,6 @@ class UnableToDecodeResponse: Error {
 }
 
 struct HttpError: Error {
+    let url: String
     let statusCode: Int
 }

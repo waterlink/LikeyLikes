@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F11737311DFDD67400C0777A /* ItemList.xib in Resources */ = {isa = PBXBuildFile; fileRef = F11737301DFDD67400C0777A /* ItemList.xib */; };
+		F11737331DFDDDA100C0777A /* RenderAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11737321DFDDDA100C0777A /* RenderAction.swift */; };
 		F12B9C101DFC829B000EFE4E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F12B9C0F1DFC829B000EFE4E /* Default-568h@2x.png */; };
 		F1A38F8D1DFD929100D3730E /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A38F8C1DFD929100D3730E /* Main.swift */; };
 		F1A38F8F1DFDA32100D3730E /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A38F8E1DFDA32100D3730E /* Action.swift */; };
@@ -37,6 +39,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F11737301DFDD67400C0777A /* ItemList.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ItemList.xib; sourceTree = "<group>"; };
+		F11737321DFDDDA100C0777A /* RenderAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderAction.swift; sourceTree = "<group>"; };
 		F12B9C0F1DFC829B000EFE4E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		F1A38F8C1DFD929100D3730E /* Main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		F1A38F8E1DFDA32100D3730E /* Action.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
@@ -115,6 +119,8 @@
 				F1A38F981DFDAA8400D3730E /* Dictionary+Merge.swift */,
 				F1A38F9A1DFDAB0C00D3730E /* ForEachAction.swift */,
 				F1A38F9C1DFDB13900D3730E /* LogAction.swift */,
+				F11737301DFDD67400C0777A /* ItemList.xib */,
+				F11737321DFDDDA100C0777A /* RenderAction.swift */,
 			);
 			path = LikeyLikes;
 			sourceTree = "<group>";
@@ -212,6 +218,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F11737311DFDD67400C0777A /* ItemList.xib in Resources */,
 				F1E1214F1DFC6F20008AD048 /* Assets.xcassets in Resources */,
 				F12B9C101DFC829B000EFE4E /* Default-568h@2x.png in Resources */,
 			);
@@ -240,6 +247,7 @@
 				F1A38F951DFDA3B900D3730E /* HttpClient.swift in Sources */,
 				F1B1648A1DFD70D00060E306 /* RequestAction.swift in Sources */,
 				F1E1214A1DFC6F20008AD048 /* ViewController.swift in Sources */,
+				F11737331DFDDDA100C0777A /* RenderAction.swift in Sources */,
 				F1A38F9B1DFDAB0C00D3730E /* ForEachAction.swift in Sources */,
 				F1E121481DFC6F20008AD048 /* AppDelegate.swift in Sources */,
 				F1A38F971DFDA48200D3730E /* DslInterpreter.swift in Sources */,

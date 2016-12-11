@@ -13,13 +13,15 @@ class Main {
     
     func run() {
         
+        let timestamp = NSDate().timeIntervalSince1970
+        
         dslInterpreter.run(
             ["name": "builtin.RequestServicesDefinitions",
              "subscribe":
                 ["event": "start",
                  "action": "request",
                  "options":
-                    ["url": "/services.json",
+                    ["url": "/services.json?t=\(timestamp)",
                      "publish": "rcv_services"]
                 ]
             ]

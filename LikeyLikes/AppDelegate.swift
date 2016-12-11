@@ -13,6 +13,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return true
         }
         
+        window = UIWindow(frame: UIScreen.main.bounds)
+        let viewController = ViewController(nibName: "ItemList", bundle: nil)
+        window?.rootViewController = viewController
+        window?.makeKeyAndVisible()
+        
         let messageBus = MessageBus()
         
         let httpClient = StockHttpClient(
@@ -28,6 +33,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 messageBus: messageBus),
             
             "log": LogAction(),
+            
+            "render": RenderAction(
+                viewController: viewController),
 
         ]
         
