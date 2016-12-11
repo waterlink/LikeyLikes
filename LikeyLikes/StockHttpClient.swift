@@ -2,15 +2,20 @@ import Foundation
 
 class StockHttpClient: HttpClient {
     let endpoint: String
+    let urlSession: URLSession
     
     init(endpoint: String) {
         self.endpoint = endpoint
+        
+        let urlSessionConfig = URLSessionConfiguration.default
+        urlSessionConfig.requestCachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        urlSession = URLSession(configuration: urlSessionConfig)
     }
     
     func get(url: String, handler: @escaping (String, Error?) -> Void) {
         print("[StockHttpClient] get: \(url)")
         
-        let task = URLSession.shared.dataTask(
+        let task = urlSession.dataTask(
             with: URL(string: "\(endpoint)\(url)")!
         ) {(data, response, error) in
             

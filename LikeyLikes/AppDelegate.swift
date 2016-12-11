@@ -28,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 messageBus: messageBus),
             
             "log": LogAction(),
-            
+
         ]
         
         let dslInterpreter = DslInterpreter(
@@ -37,8 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let main = Main(
             messageBus: messageBus,
-            dslInterpreter: dslInterpreter,
-            actions: actions)
+            dslInterpreter: dslInterpreter)
         
         main.run()
         

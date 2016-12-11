@@ -3,15 +3,12 @@ import Foundation
 class Main {
     private let messageBus: MessageBus
     private let dslInterpreter: DslInterpreter
-    private let actions: [String: Action]
     
     init(messageBus: MessageBus,
-         dslInterpreter: DslInterpreter,
-         actions: [String: Action]) {
+         dslInterpreter: DslInterpreter) {
         
         self.messageBus = messageBus
         self.dslInterpreter = dslInterpreter
-        self.actions = actions
     }
     
     func run() {
@@ -57,13 +54,43 @@ class Main {
                     "message": "got service definition: "]]]
         )
         
-        messageBus.subscribe(topic: "rcv_service_error") { error in
-            print("[main] unable to get service definition: \(error)")
-        }
+        dslInterpreter.run(
+            ["name": "builtin.ServiceDefinitionParser",
+             "subscribe":
+                ["event": "rcv_service",
+                 "action": "for_each",
+                 "options":
+                    ["target": ".response",
+                     "publish": "service_definition_parsed"]]]
+        )
         
-        messageBus.subscribe(topic: "rcv_services_error") { error in
-            print("[main] unabel to get list of services: \(error)")
-        }
+        dslInterpreter.run(
+            ["name": "builtin.ServiceDefinitionInterpreter",
+             "subscribe":
+                ["event": "service_definition_parsed",
+                 "action": "interpret",
+                 "options": [:]]]
+        )
+        
+        dslInterpreter.run(
+            ["name": "builtin.ServiceDefinitionErrorLogger",
+             "subscribe":
+                ["event": "rcv_service_error",
+                 "action": "log",
+                 "options":
+                    ["appendEvent": true,
+                     "message": "unable to get service definition: "]]]
+        )
+        
+        dslInterpreter.run(
+            ["name": "builtin.ServicesDefinitionsErrorLogger",
+             "subscribe":
+                ["event": "rcv_services_error",
+                 "action": "log",
+                 "options":
+                    ["appendEvent": true,
+                     "message": "unable to get list of services: "]]]
+        )
         
         messageBus.publish(topic: "start", event: "")
         

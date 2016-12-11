@@ -34,18 +34,24 @@ class ForEachAction: Action {
             }
         }
         
-        guard let list = json as? [Any] else {
-            print("[ForEachAction] can't traverse '\(json)' as a list")
+        if let list = json as? [Any] {
+            list.forEach { value in
+                publishValue(topic: topic, value: value)
+            }
+        } else if let value = json as? [String: Any] {
+            publishValue(topic: topic, value: value)
+        } else {
+            print("[ForEachAction] can't traverse '\(json)' as a list or as a single value")
+            return
+        }
+    }
+    
+    private func publishValue(topic: String, value: Any) {
+        guard let event = Json.dump(value) else {
+            print("[ForEachAction] can't dump '\(value)' to JSON")
             return
         }
         
-        list.forEach { value in
-            guard let event = Json.dump(value) else {
-                print("[ForEachAction] can't dump '\(value)' to JSON")
-                return
-            }
-            
-            messageBus.publish(topic: topic, event: event)
-        }
+        messageBus.publish(topic: topic, event: event)
     }
 }
