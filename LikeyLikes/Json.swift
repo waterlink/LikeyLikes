@@ -7,7 +7,7 @@ class Json {
                 with: string.data(using: .utf8)!,
                 options: .mutableContainers)
         } catch {
-            print("[Json] unable to parse json: \(error)")
+            print("[Json] unable to parse json: \(error); string='\(string)'")
             return nil
         }
     }
@@ -24,7 +24,7 @@ class Json {
             
             return encode(data: result)
         } catch {
-            print("[Json] unable to dump json: \(error)")
+            print("[Json] unable to dump json: \(error); data='\(data)'")
             return nil
         }
     }
@@ -38,5 +38,19 @@ class Json {
         }
         
         return string
+    }
+    
+    static func query(_ data: Any, at expression: String) -> Any? {
+        var json: Any? = data
+        
+        let parts = expression.components(separatedBy: ".")
+        
+        parts.forEach { part in
+            if part != "" {
+                json = (json as? [String: Any])?[part] as Any?
+            }
+        }
+        
+        return json
     }
 }

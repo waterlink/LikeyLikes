@@ -1,3 +1,5 @@
+import Foundation
+
 class DslInterpreter: Action {
     private let messageBus: MessageBus
     private var actions: [String: Action]
@@ -28,13 +30,59 @@ class DslInterpreter: Action {
             return
         }
         
+        let interpolateOptions = subscription["interpolateOptions"] as? [String] ?? [];
+        
         let eventAs = subscription["eventAs"] as? String ?? "_rawEvent"
         
         messageBus.subscribe(topic: topic) { event in
-            let data = options.merged(with:
+            var data = options.merged(with:
                 [eventAs: event,
                  "_serviceName": serviceName])
+            
+            if let parsedEvent = Json.parse(event) {
+                interpolateOptions.forEach { option in
+                    if let string = data[option] as? String {
+                        data[option] = self.interpolate(string: string, event: parsedEvent)
+                    }
+                }
+            }
+            
             action.execute(data: data)
+        }
+    }
+    
+    private func interpolate(string: String, event: Any) -> String {
+        do {
+            
+            var result = string
+            
+            let regex = try NSRegularExpression(pattern: "\\$\\{(\\.[a-zA-Z0-9_\\.]+)\\}", options: [])
+            
+            let nsString = NSString(string: string)
+            
+            let matches = regex.matches(
+                in: string,
+                options: [],
+                range: NSRange(location: 0, length: nsString.length))
+            
+            let expressions = matches.map { match in
+                nsString.substring(with: match.rangeAt(1))
+            }
+            
+            print("[DEBUG] expressions='\(expressions)'")
+            
+            expressions.forEach { expression in
+                if let value = Json.query(event, at: expression) {
+                    result = result.replacingOccurrences(of: "${\(expression)}", with: "\(value)")
+                }
+            }
+            
+            print("[DEBUG] interpolated '\(string)' to '\(result)' using data '\(event)'")
+            return result
+            
+        } catch {
+            print("[DslInterpreter] invalid regex: \(error)")
+            return string
         }
     }
     

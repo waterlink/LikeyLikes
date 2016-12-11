@@ -13,12 +13,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return true
         }
         
+        let messageBus = MessageBus()
+        
         window = UIWindow(frame: UIScreen.main.bounds)
         let viewController = ViewController(nibName: "ItemList", bundle: nil)
+        viewController.messageBus = messageBus
         window?.rootViewController = viewController
         window?.makeKeyAndVisible()
-        
-        let messageBus = MessageBus()
         
         let httpClient = StockHttpClient(
             endpoint: "https://waterlink.github.io/LikeyLikesStatic")
@@ -35,7 +36,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             "log": LogAction(),
             
             "render": RenderAction(
-                viewController: viewController),
+                viewController: viewController,
+                messageBus: messageBus),
 
         ]
         
