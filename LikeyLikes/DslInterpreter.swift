@@ -9,10 +9,15 @@ class DslInterpreter {
     
     func run(_ dsl: [String: Any]) {
         guard let subscription = dsl["subscribe"] as? [String: Any],
-            let topic = subscription["event"] as? String,
+            let serviceName = dsl["name"] as? String else {
+                print("[DslInterpreter] DSL has to have 'name' and 'subscribe' fields")
+                return
+        }
+        
+        guard let topic = subscription["event"] as? String,
             let actionName = subscription["action"] as? String,
             let options = subscription["options"] as? [String: Any] else {
-                print("[DslInterpreter] DSL has to have 'event', 'action' and 'options' parameters")
+                print("[DslInterpreter] DSL subscription has to have 'event', 'action' and 'options' fields")
                 return
         }
         
@@ -21,10 +26,12 @@ class DslInterpreter {
             return
         }
         
-        let eventAs = subscription["eventAs"] as? String ?? "rawEvent"
+        let eventAs = subscription["eventAs"] as? String ?? "_rawEvent"
         
         messageBus.subscribe(topic: topic) { event in
-            let data = options.merged(with: [eventAs: event])
+            let data = options.merged(with:
+                [eventAs: event,
+                 "_serviceName": serviceName])
             action.execute(data: data)
         }
     }

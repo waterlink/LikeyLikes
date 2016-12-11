@@ -16,7 +16,7 @@ class ForEachAction: Action {
             return
         }
         
-        guard let rawEvent = data["rawEvent"] as? String else {
+        guard let rawEvent = data["_rawEvent"] as? String else {
             print("[ForEachAction] was not able to find event")
             return
         }

@@ -17,7 +17,8 @@ class Main {
     func run() {
         
         dslInterpreter.run(
-            ["subscribe":
+            ["name": "builtin.RequestServicesDefinitions",
+             "subscribe":
                 ["event": "start",
                  "action": "request",
                  "options":
@@ -28,7 +29,8 @@ class Main {
         )
         
         dslInterpreter.run(
-            ["subscribe":
+            ["name": "builtin.ExtractServiceUrls",
+             "subscribe":
                 ["event": "rcv_services",
                  "action": "for_each",
                  "options":
@@ -37,16 +39,23 @@ class Main {
         )
         
         dslInterpreter.run(
-            ["subscribe":
+            ["name": "builtin.RequestServiceDefinition",
+             "subscribe":
                 ["event": "rcv_service_url",
                  "action": "request",
                  "eventAs": "url",
                  "options": ["publish": "rcv_service"]]]
         )
         
-        messageBus.subscribe(topic: "rcv_service") { event in
-            print("[main] got service definition: \(event)")
-        }
+        dslInterpreter.run(
+            ["name": "builtin.ServiceDefinitionLogger",
+             "subscribe":
+                ["event": "rcv_service",
+                 "action": "log",
+                 "options": [
+                    "appendEvent": true,
+                    "message": "got service definition: "]]]
+        )
         
         messageBus.subscribe(topic: "rcv_service_error") { error in
             print("[main] unable to get service definition: \(error)")

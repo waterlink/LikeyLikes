@@ -27,6 +27,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             "for_each": ForEachAction(
                 messageBus: messageBus),
             
+            "log": LogAction(),
+            
         ]
         
         let dslInterpreter = DslInterpreter(
