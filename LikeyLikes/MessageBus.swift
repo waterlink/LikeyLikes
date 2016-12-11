@@ -1,8 +1,7 @@
 import Foundation
 
 public class MessageBus {
-    var topics: [String: [(String) -> Void]] = [:]
-    var subscriber: ((String) -> Void)?
+    private var topics: [String: [(String) -> Void]] = [:]
     
     public func publish(topic: String, event: String) {
         (topics[topic] ?? []).forEach { subscriber in
