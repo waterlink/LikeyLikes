@@ -8,6 +8,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        if ProcessInfo.processInfo.environment["LIKEY_LIKES_TESTS"] == "yes" {
+            return true
+        }
+        
+        let messageBus = MessageBus()
+        
+        let httpClient = StockHttpClient(
+            endpoint: "https://waterlink.github.io/LikeyLikesStatic")
+        
+        let actions: [String: Action] = [
+            
+            "request": RequestAction(
+                messageBus: messageBus,
+                httpClient: httpClient),
+            
+            "for_each": ForEachAction(
+                messageBus: messageBus),
+            
+        ]
+        
+        let dslInterpreter = DslInterpreter(
+            messageBus: messageBus,
+            actions: actions)
+        
+        let main = Main(
+            messageBus: messageBus,
+            dslInterpreter: dslInterpreter,
+            actions: actions)
+        
+        main.run()
+        
         return true
     }
 

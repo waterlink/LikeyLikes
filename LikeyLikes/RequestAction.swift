@@ -1,6 +1,6 @@
 import Foundation
 
-public class RequestAction {
+public class RequestAction: Action {
     private let messageBus: MessageBus
     private let httpClient: HttpClient
     
@@ -26,7 +26,7 @@ public class RequestAction {
         httpClient.get(url: url) { response, error in
             
             if let error = error {
-                handleError(error: error, topic: topic)
+                self.handleError(error: error, topic: topic)
                 return
             }
             
@@ -36,7 +36,7 @@ public class RequestAction {
                     return
             }
             
-            messageBus.publish(topic: topic,
+            self.messageBus.publish(topic: topic,
                                event: result)
             
         }
@@ -53,46 +53,5 @@ public class RequestAction {
         messageBus.publish(
             topic: "\(topic)_error",
             event: result)
-    }
-}
-
-public protocol HttpClient {
-    func get(url: String, handler: (String, Error?) -> Void)
-}
-
-class Json {
-    static func parse(_ string: String) -> Any? {
-        do {
-            return try JSONSerialization.jsonObject(
-                with: string.data(using: .utf8)!,
-                options: .mutableContainers)
-        } catch {
-            print("[Json] unable to parse json: \(error)")
-            return nil
-        }
-    }
-    
-    static func dump(_ data: Any) -> String? {
-        do {
-            let result = try JSONSerialization.data(
-                withJSONObject: data,
-                options: JSONSerialization.WritingOptions())
-            
-            return encode(data: result)
-        } catch {
-            print("[Json] unable to dump json: \(error)")
-            return nil
-        }
-    }
-    
-    private static func encode(data: Data) -> String? {
-        guard let string = String(
-            data: data,
-            encoding: String.Encoding.utf8) else {
-                print("[Json] unable to encode json data to string")
-                return nil
-        }
-        
-        return string
     }
 }

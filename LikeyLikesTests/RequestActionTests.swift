@@ -85,7 +85,7 @@ class FakeHttpClient: HttpClient {
     var preparedError: Error?
     var repliedToUrl: String?
     
-    func get(url: String, handler: (String, Error?) -> Void) {
+    func get(url: String, handler: @escaping (String, Error?) -> Void) {
         repliedToUrl = url
         handler(preparedResponse, preparedError)
     }
